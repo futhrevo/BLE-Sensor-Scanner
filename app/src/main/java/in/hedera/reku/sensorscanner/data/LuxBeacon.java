@@ -45,7 +45,7 @@ public class LuxBeacon extends Beacon {
     }
 
     public boolean isActive(){
-        return System.currentTimeMillis() - attime < 1000;
+        return System.currentTimeMillis() - attime <= 3100;
     }
 
     private Long temperature;
@@ -59,5 +59,4 @@ public class LuxBeacon extends Beacon {
         temperature = data.get(1);
         attime = System.currentTimeMillis();
     }
-
 }

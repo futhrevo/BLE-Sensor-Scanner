@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,8 @@ public class BeaconRecyAdapter extends RecyclerView.Adapter<BeaconRecyAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final LuxBeacon luxBeacon = values.get(position);
+        LuxBeacon luxBeacon = values.get(position);
+        final int pos = position;
         holder.tv_beacon_lux.setText(Long.toString(luxBeacon.getLux()));
         holder.tv_beacon_mac.setText(luxBeacon.getBeacon().getBluetoothAddress());
         holder.tv_beacon_name.setText(luxBeacon.getBeacon().getBluetoothName());
@@ -67,7 +69,8 @@ public class BeaconRecyAdapter extends RecyclerView.Adapter<BeaconRecyAdapter.Vi
             holder.cardView.setBackgroundColor(Color.parseColor("#757575"));
         }
 
-        new CountDownTimer(1000, 500){
+
+        new CountDownTimer(5000, 1000){
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -76,7 +79,13 @@ public class BeaconRecyAdapter extends RecyclerView.Adapter<BeaconRecyAdapter.Vi
 
             @Override
             public void onFinish() {
-                holder.cardView.setBackgroundColor(Color.parseColor("#757575"));
+                LuxBeacon luxBeacon = values.get(pos);
+                if(luxBeacon.isActive()){
+                    holder.cardView.setBackgroundColor(Color.parseColor("#ffffff"));
+                }else{
+                    Log.i("BeaconRecyAdapter", String.valueOf(System.currentTimeMillis() - luxBeacon.getAttime()));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#757575"));
+                }
             }
         }.start();
     }
